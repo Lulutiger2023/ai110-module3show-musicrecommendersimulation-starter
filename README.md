@@ -196,15 +196,20 @@ weight ratio.
 
 ## Limitations and Risks
 
-Summarize some limitations of your recommender.
 
-Examples:
+- The catalog only has 18 songs, and most genres/moods appear in just one song, so 
+  niche taste combinations have almost nothing real to match against.
+- Genre and mood use exact-string matching with no partial credit, so it can't 
+  recognize that "metal" is closer to "rock" than "EDM" is — every non-exact genre 
+  scores the same 0.
+- It only uses five numeric/categorical tags per song — no lyrics, no actual audio, 
+  no listening history — so "taste" is reduced to a handful of hand-assigned labels.
+- As shown in testing, it can confidently recommend a song that contradicts an 
+  explicit numeric preference (e.g. asking for high energy but getting the lowest-
+  energy song) when categorical matches are strong enough, with no warning that 
+  anything is off.
 
-- It only works on a tiny catalog
-- It does not understand lyrics or language
-- It might over favor one genre or mood
-
-You will go deeper on this in your model card.
+See `model_card.md` for a deeper breakdown of these issues.
 
 ---
 
@@ -214,10 +219,21 @@ Read and complete `model_card.md`:
 
 [**Model Card**](model_card.md)
 
-Write 1 to 2 paragraphs here about what you learned:
+Real recommenders turn taste into numbers the same way this one does — they take a 
+handful of measurable signals (genre tags, listening history, skip rate) and combine 
+them into a single score, which means the score is only as good as the signals it's 
+built from and the weights chosen for them. Working through this project made that 
+very concrete: choosing to weight mood highest felt like a reasonable design decision 
+on its own, but combined with exact-match scoring it produced a system that would 
+confidently recommend a song with the opposite energy of what a user asked for.
 
-- about how recommenders turn data into predictions
-- about where bias or unfairness could show up in systems like this
+Bias in a system like this doesn't come from anything malicious — it comes from small, 
+individually-reasonable choices (a weight here, an exact-match rule there, a dataset 
+that happens to be thin in some categories) stacking up into blind spots the system 
+has no way to notice on its own. That's the part that changed how I think about real 
+recommendation apps: they can look accurate most of the time while still failing 
+confidently and silently on the profiles that don't fit the mold the data was built 
+around.
 
 
 
