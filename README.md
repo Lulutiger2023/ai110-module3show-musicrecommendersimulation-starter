@@ -82,12 +82,24 @@ You can add more tests in `tests/test_recommender.py`.
 Paste a sample of your recommender's output here as a text block so a reader can see what it produces:
 
 ```
-# e.g.:
-# User profile: genre=indie, mood=chill, energy=low
-# Recommendations:
-#   1. ...
-#   2. ...
-#   3. ...
+Loaded songs: 18
+
+Top recommendations:
+
+Storm Runner - Score: 1.00
+Because: mood match (+3.0), genre match (+2.0), energy closeness (+2.0), acoustic match (+1.0)
+
+Gym Hero - Score: 0.74
+Because: mood match (+3.0), energy closeness (+1.9), acoustic match (+1.0)
+
+Concrete Kingdom - Score: 0.37
+Because: energy closeness (+2.0), acoustic match (+1.0)
+
+Circuit Sunrise - Score: 0.36
+Because: energy closeness (+1.9), acoustic match (+1.0)
+
+Ironclad Dawn - Score: 0.36
+Because: energy closeness (+1.9), acoustic match (+1.0)
 ```
 
 **Screenshot or video** *(optional)*: <!-- Insert a screenshot or demo video link here -->

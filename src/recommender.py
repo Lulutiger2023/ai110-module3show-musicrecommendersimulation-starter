@@ -43,9 +43,11 @@ class Recommender:
     Required by tests/test_recommender.py
     """
     def __init__(self, songs: List[Song]):
+        """Initialize the recommender with a list of songs."""
         self.songs = songs
 
     def _score(self, user: UserProfile, song: Song) -> float:
+        """Return the normalized (0-1) match score between a user and a song."""
         mood = 1.0 if song.mood == user.favorite_mood else 0.0
         genre = 1.0 if song.genre == user.favorite_genre else 0.0
         energy = 1.0 - abs(song.energy - user.target_energy)
@@ -61,19 +63,22 @@ class Recommender:
         return weighted / TOTAL_WEIGHT
 
     def recommend(self, user: UserProfile, k: int = 5) -> List[Song]:
+        """Return the top-k songs ranked by match score for the given user."""
         ranked = sorted(self.songs, key=lambda s: self._score(user, s), reverse=True)
         return ranked[:k]
 
     def explain_recommendation(self, user: UserProfile, song: Song) -> str:
+        """Return a human-readable explanation of why a song was recommended."""
         reasons = []
         if song.mood == user.favorite_mood:
-            reasons.append(f"matches your favorite mood ({user.favorite_mood})")
+            reasons.append(f"mood match (+{MOOD_WEIGHT:.1f})")
         if song.genre == user.favorite_genre:
-            reasons.append(f"matches your favorite genre ({user.favorite_genre})")
+            reasons.append(f"genre match (+{GENRE_WEIGHT:.1f})")
         if abs(song.energy - user.target_energy) <= 0.2:
-            reasons.append("energy is close to what you want")
+            energy_points = ENERGY_WEIGHT * (1.0 - abs(song.energy - user.target_energy))
+            reasons.append(f"energy closeness (+{energy_points:.1f})")
         if (song.acousticness >= 0.5) == user.likes_acoustic:
-            reasons.append("acoustic feel fits your taste")
+            reasons.append(f"acoustic match (+{ACOUSTIC_WEIGHT:.1f})")
 
         score = self._score(user, song)
         if not reasons:
@@ -113,20 +118,20 @@ def score_song(user_prefs: Dict, song: Dict) -> Tuple[float, List[str]]:
 
     mood = 1.0 if song["mood"] == favorite_mood else 0.0
     if mood:
-        reasons.append(f"matches your favorite mood ({favorite_mood})")
+        reasons.append(f"mood match (+{MOOD_WEIGHT:.1f})")
 
     genre = 1.0 if song["genre"] == favorite_genre else 0.0
     if genre:
-        reasons.append(f"matches your favorite genre ({favorite_genre})")
+        reasons.append(f"genre match (+{GENRE_WEIGHT:.1f})")
 
     energy = 1.0 - abs(song["energy"] - target_energy)
     if abs(song["energy"] - target_energy) <= 0.2:
-        reasons.append("energy is close to what you want")
+        reasons.append(f"energy closeness (+{ENERGY_WEIGHT * energy:.1f})")
 
     is_acoustic = song["acousticness"] >= 0.5
     acoustic = 1.0 if is_acoustic == likes_acoustic else 0.0
     if acoustic:
-        reasons.append("acoustic feel fits your taste")
+        reasons.append(f"acoustic match (+{ACOUSTIC_WEIGHT:.1f})")
 
     weighted = (
         MOOD_WEIGHT * mood
