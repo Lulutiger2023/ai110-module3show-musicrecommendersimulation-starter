@@ -79,7 +79,57 @@ You can add more tests in `tests/test_recommender.py`.
 
 ## Sample Recommendation Output
 
-Paste a sample of your recommender's output here as a text block so a reader can see what it produces:
+
+### Profile 1 — High-Energy Pop
+`{"favorite_genre": "pop", "favorite_mood": "happy", "target_energy": 0.9, "likes_acoustic": False}`
+
+```
+Loaded songs: 18
+
+Top recommendations:
+
+Sunrise City - Score: 0.98
+Because: mood match (+3.0), genre match (+2.0), energy closeness (+1.8), acoustic match (+1.0)
+
+Rooftop Lights - Score: 0.71
+Because: mood match (+3.0), energy closeness (+1.7), acoustic match (+1.0)
+
+Gym Hero - Score: 0.62
+Because: genre match (+2.0), energy closeness (+1.9), acoustic match (+1.0)
+
+Storm Runner - Score: 0.37
+Because: energy closeness (+2.0), acoustic match (+1.0)
+
+Concrete Kingdom - Score: 0.37
+Because: energy closeness (+2.0), acoustic match (+1.0)
+```
+
+### Profile 2 — Chill Lofi
+`{"favorite_genre": "lofi", "favorite_mood": "chill", "target_energy": 0.3, "likes_acoustic": True}`
+
+```
+Loaded songs: 18
+
+Top recommendations:
+
+Library Rain - Score: 0.99
+Because: mood match (+3.0), genre match (+2.0), energy closeness (+1.9), acoustic match (+1.0)
+
+Midnight Coding - Score: 0.97
+Because: mood match (+3.0), genre match (+2.0), energy closeness (+1.8), acoustic match (+1.0)
+
+Spacewalk Thoughts - Score: 0.74
+Because: mood match (+3.0), energy closeness (+2.0), acoustic match (+1.0)
+
+Focus Flow - Score: 0.60
+Because: genre match (+2.0), energy closeness (+1.8), acoustic match (+1.0)
+
+Letters to Autumn - Score: 0.37
+Because: energy closeness (+2.0), acoustic match (+1.0)
+```
+
+### Profile 3 — Deep Intense Rock
+`{"favorite_genre": "rock", "favorite_mood": "intense", "target_energy": 0.9, "likes_acoustic": False}`
 
 ```
 Loaded songs: 18
@@ -102,17 +152,45 @@ Ironclad Dawn - Score: 0.36
 Because: energy closeness (+1.9), acoustic match (+1.0)
 ```
 
+### Profile 4 — The Contradiction (adversarial)
+`{"favorite_genre": "classical", "favorite_mood": "melancholic", "target_energy": 0.95, "likes_acoustic": False}`
+
+```
+Loaded songs: 18
+
+Top recommendations:
+
+Nocturne in Ash - Score: 0.70
+Because: mood match (+3.0), genre match (+2.0)
+
+Rainwater Blues - Score: 0.48
+Because: mood match (+3.0)
+
+Ironclad Dawn - Score: 0.37
+Because: energy closeness (+2.0), acoustic match (+1.0)
+
+Circuit Sunrise - Score: 0.37
+Because: energy closeness (+2.0), acoustic match (+1.0)
+
+Gym Hero - Score: 0.37
+Because: energy closeness (+2.0), acoustic match (+1.0)
+```
+
 **Screenshot or video** *(optional)*: <!-- Insert a screenshot or demo video link here -->
 
 ---
 
 ## Experiments You Tried
 
-Use this section to document the experiments you ran. For example:
+**Experiment: doubled energy weight (2→4), halved genre weight (2→1)**
 
-- What happened when you changed the weight on genre from 2.0 to 0.5
-- What happened when you added tempo or valence to the score
-- How did your system behave for different types of users
+Even with energy weighted 2x higher than its original value, the "Contradiction" 
+profile (target_energy: 0.95) still ranked the lowest-energy song (Nocturne in Ash, 
+energy 0.24) first — 0.57 vs 0.55 for the closest energy-matched competitor, a 0.02 
+margin. This shows the bias isn't simply a matter of energy being underweighted: it's 
+that mood/genre are binary exact-matches while energy is continuous, so a categorical 
+hit is worth more per point spent than a numeric near-miss, almost regardless of the 
+weight ratio.
 
 ---
 
