@@ -14,6 +14,11 @@ well each one matches. It's a classroom simulation, not a production system — 
 assumes the user's stated preferences are complete and static, and it has no way to 
 learn from listening behavior or feedback over time.
 
+**Not intended for**: real users, real deployment, or any decision where getting 
+a bad recommendation has real consequences. It has no safeguards against confidently 
+recommending something that contradicts a stated preference (see Limitations), so it 
+should not be treated as more reliable than it actually is.
+
 ---
 
 ## 3. How the Model Works  
@@ -120,15 +125,27 @@ of what they asked for — it just adds up points.
 
 ---
 
-## 9. Personal Reflection  
+## 9. Personal Reflection
 
-Building this made it clear how much a recommender's behavior depends on small design 
-choices that look reasonable in isolation — giving mood the highest weight felt 
-intuitive, but combined with exact-match scoring it meant the system would confidently 
-recommend a song with the *opposite* energy of what a user asked for, as long as the 
-mood and genre matched. The most surprising result was that doubling the energy weight 
-barely changed this outcome (a 0.02-point margin), which showed me the real problem 
-wasn't the weights themselves but the binary nature of genre/mood matching. It changed 
-how I think about real recommendation apps — a system can look accurate on typical 
-profiles while still failing badly and confidently on edge cases, with no signal to 
-the user that anything went wrong.
+The biggest learning moment was realizing that doubling the energy weight barely 
+changed the "Contradiction" test result (0.02-point margin) — I expected weight 
+adjustments to fix the bias, but the real problem was that mood/genre give all-or-
+nothing points while energy gives partial credit, so no amount of weight-tuning could 
+fully fix it. That's a different kind of bug than I expected to find.
+
+AI tools (Claude Code) helped most with implementation speed — writing the scoring 
+logic, running multiple test profiles, and finding biases I hadn't thought to look 
+for (like the "dead zone" in mid-range energy values, which I never would have 
+noticed just by eyeballing the CSV). I had to double-check it most closely when it 
+made claims about *why* a result happened — one of its early explanations for a score 
+was actually slightly wrong about which term contributed the points, and re-reading 
+the code myself caught it.
+
+What surprised me most is how "confident" and human the recommendations feel even 
+though the underlying logic is just adding up four numbers. Scores like 0.98 or 1.00 
+read as authoritative, but they're really just exact-match booleans plus one distance 
+calculation — there's no understanding of music at all, just arithmetic dressed up as 
+taste.
+
+If I extended this project, I'd start with a genre/mood similarity table instead of 
+exact matching, since that's the single change most likely to fix the biases I found.
