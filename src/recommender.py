@@ -99,11 +99,14 @@ def load_songs(csv_path: str) -> List[Dict]:
 def score_song(user_prefs: Dict, song: Dict) -> Tuple[float, List[str]]:
     """
     Scores a single song against user preferences.
+
+    Reads the user profile keys: favorite_genre, favorite_mood,
+    target_energy, and likes_acoustic.
     Required by recommend_songs() and src/main.py
     """
-    favorite_mood = user_prefs.get("mood", user_prefs.get("favorite_mood"))
-    favorite_genre = user_prefs.get("genre", user_prefs.get("favorite_genre"))
-    target_energy = user_prefs.get("energy", user_prefs.get("target_energy", 0.5))
+    favorite_mood = user_prefs.get("favorite_mood")
+    favorite_genre = user_prefs.get("favorite_genre")
+    target_energy = user_prefs.get("target_energy", 0.5)
     likes_acoustic = user_prefs.get("likes_acoustic", False)
 
     reasons: List[str] = []

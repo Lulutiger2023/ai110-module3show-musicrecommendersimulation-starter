@@ -9,3 +9,11 @@ id,title,artist,genre,mood,energy,tempo_bpm,valence,danceability,acousticness
 8,Night Drive Loop,Neon Echo,synthwave,moody,0.75,110,0.49,0.73,0.22
 9,Focus Flow,LoRoom,lofi,focused,0.40,80,0.59,0.60,0.78
 10,Rooftop Lights,Indigo Parade,indie pop,happy,0.76,124,0.81,0.82,0.35
+11,Concrete Kingdom,Rello Vane,hip-hop,angry,0.88,95,0.34,0.81,0.08
+12,Letters to Autumn,The Quiet Harbor,folk,nostalgic,0.31,84,0.52,0.44,0.88
+13,Nocturne in Ash,Mira Falcone,classical,melancholic,0.24,66,0.29,0.22,0.95
+14,Ironclad Dawn,Blackvault Rite,metal,triumphant,0.96,168,0.55,0.61,0.04
+15,Velvet Slow Dance,Otis Grey,R&B,dreamy,0.46,74,0.63,0.68,0.42
+16,Dust and Diesel,Cole Hartman,country,energetic,0.72,128,0.74,0.70,0.31
+17,Circuit Sunrise,Pulsewave Kids,EDM,energetic,0.94,128,0.70,0.90,0.06
+18,Rainwater Blues,Sadie Monroe,blues,melancholic,0.38,68,0.33,0.49,0.79

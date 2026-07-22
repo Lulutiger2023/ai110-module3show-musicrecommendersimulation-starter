@@ -19,6 +19,27 @@ Replace this paragraph with your own summary of what your version does.
 
 Real recommendation systems like Spotify combine collaborative filtering (based on what similar users like) and content-based filtering (based on song attributes). This project implements only content-based filtering, since we only have song attribute data. My recommender prioritizes mood match most heavily, followed by genre match and energy closeness, with acoustic preference weighted least.
 
+This simulation's `Song` and `UserProfile` objects use:
+- `genre`, `mood` — categorical, must match exactly
+- `energy` — numeric (0-1), scored by closeness to target
+- `acousticness` — numeric (0-1), thresholded at 0.5 to infer whether a song "feels acoustic"
+
+### Algorithm Recipe
+- Mood match: +3.0 (exact match only)
+- Genre match: +2.0 (exact match only)
+- Energy closeness: +2.0 × (1 - |song.energy - target_energy|)
+- Acoustic preference match: +1.0 (song treated as "acoustic" if acousticness ≥ 0.5)
+- Total normalized by dividing by 8.0
+
+### Potential Bias
+This system uses exact-match equality for genre and mood, so it can't express genre
+"adjacency" — a metal song and an EDM song score identically low against a rock
+profile (both 0.36), even though metal is sonically closer to rock. The scorer
+also lets mood outweigh genre (weight 3 vs 2), so a pop song matching mood can
+outscore a rock-adjacent genre that doesn't share the exact mood. In short: this
+recommender rewards exact taste matches well, but treats every "near miss" the
+same as a "total miss."
+
 ---
 
 ## Getting Started
