@@ -18,8 +18,8 @@ def main() -> None:
 
     # Starter example profile
     user_prefs = {
-        "favorite_genre": "rock",
-        "favorite_mood": "intense",
+        "favorite_genre": "pop",
+        "favorite_mood": "happy",
         "target_energy": 0.9,
         "likes_acoustic": False,
     }
